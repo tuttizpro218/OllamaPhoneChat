@@ -4,7 +4,8 @@
 
     <application
         android:label="Ollama Chat"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true">
 
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
@@ -14,4 +15,5 @@
         </activity>
 
     </application>
+
 </manifest>
