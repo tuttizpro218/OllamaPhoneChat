@@ -1021,6 +1021,7 @@ async function sendMessage() {
     const reader = r.body.getReader();
     const decoder = new TextDecoder();
 
+    let lastRender = Date.now();
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -1033,8 +1034,15 @@ async function sendMessage() {
           const obj = JSON.parse(line);
           if (obj.message && obj.message.content) {
             fullText += obj.message.content;
-            aiBubbleEl.innerHTML = renderMarkdown(fullText) + '<span class="cursor-blink"></span>';
-            scrollToBottom();
+            // Only re-render DOM every 100ms to avoid blocking UI thread
+            const now = Date.now();
+            if (now - lastRender > 100) {
+              aiBubbleEl.innerHTML = renderMarkdown(fullText) + '<span class="cursor-blink"></span>';
+              scrollToBottom();
+              lastRender = now;
+              // Yield to UI thread
+              await new Promise(r => setTimeout(r, 0));
+            }
           }
         } catch(parseErr) {}
       }
