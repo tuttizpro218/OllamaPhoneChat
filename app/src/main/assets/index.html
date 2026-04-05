@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ollama Chat</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --bg: #0a0a0f;
@@ -27,7 +27,7 @@
 
   html, body {
     height: 100%; width: 100%; overflow: hidden;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
   }
@@ -95,7 +95,7 @@
   .header-subtitle {
     font-size: 11px;
     color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-weight: 300;
     margin-top: 2px;
   }
@@ -169,7 +169,7 @@
   .setting-group label {
     display: block;
     font-size: 11px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -184,7 +184,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 13px;
     outline: none;
     transition: border-color 0.15s;
@@ -223,7 +223,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     color: var(--muted);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
@@ -239,7 +239,7 @@
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
   .conn-result {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 11px;
     padding: 8px 12px;
     border-radius: 8px;
@@ -261,7 +261,7 @@
     border: 1px dashed var(--border);
     border-radius: var(--radius-sm);
     color: var(--accent);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -273,7 +273,7 @@
   .fetch-models-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
   .model-list-info {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 11px;
     color: var(--muted);
     margin-top: 6px;
@@ -305,7 +305,7 @@
     box-shadow: 0 0 8px rgba(124,106,247,0.5);
   }
   .slider-val {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 13px;
     color: var(--accent);
     min-width: 32px;
@@ -318,7 +318,7 @@
     border: none;
     border-radius: var(--radius-sm);
     color: #fff;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
@@ -393,7 +393,7 @@
     color: var(--muted);
     cursor: pointer;
     transition: all 0.15s;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
   }
   .suggestion-chip:active {
     border-color: var(--accent);
@@ -465,7 +465,7 @@
   }
 
   .bubble code {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 12px;
     background: rgba(255,255,255,0.06);
     padding: 1px 5px;
@@ -479,7 +479,7 @@
     padding: 10px;
     overflow-x: auto;
     margin: 6px 0;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 12px;
     line-height: 1.5;
   }
@@ -492,7 +492,7 @@
   .msg-time {
     font-size: 10px;
     color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     padding: 0 4px;
   }
 
@@ -569,7 +569,7 @@
     border: none;
     outline: none;
     color: var(--text);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Segoe UI', system-ui, sans-serif;
     font-size: 15px;
     line-height: 1.4;
     resize: none;
@@ -618,7 +618,7 @@
   #stop-btn:active { opacity: 0.7; }
 
   .model-tag {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Courier New', monospace;
     font-size: 10px;
     color: var(--muted);
     text-align: center;
@@ -683,7 +683,7 @@
       </div>
       <div class="setting-group">
         <label>System Prompt</label>
-        <textarea id="system-prompt" style="width:100%;min-height:80px;resize:vertical;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:JetBrains Mono,monospace;font-size:13px;outline:none;" placeholder="You are a helpful assistant..."></textarea>
+        <textarea id="system-prompt" style="width:100%;min-height:80px;resize:vertical;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family: 'Courier New', monospace;font-size:13px;outline:none;" placeholder="You are a helpful assistant..."></textarea>
       </div>
       <div class="setting-group">
         <label>Temperature</label>
@@ -763,6 +763,18 @@ let history = [];    // [{role, content}]
 let abortCtrl = null;
 let isStreaming = false;
 
+// Safe fetch with timeout — avoids AbortSignal.timeout() cloning bug
+function fetchWithTimeout(url, opts, ms) {
+  ms = ms || 6000;
+  opts = opts || {};
+  var ctrl = new AbortController();
+  var timer = setTimeout(function(){ ctrl.abort(); }, ms);
+  var merged = {};
+  for (var k in opts) merged[k] = opts[k];
+  merged.signal = ctrl.signal;
+  return fetch(url, merged).finally(function(){ clearTimeout(timer); });
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────
 (function init() {
   const saved = localStorage.getItem('ollama-config');
@@ -827,30 +839,33 @@ async function testConnection() {
   btn.textContent = '...';
   btn.className = 'test-btn testing';
   result.className = 'conn-result';
+  result.textContent = '';
 
   try {
     const t0 = Date.now();
-    const r = await fetch(`${host}/api/tags`, { signal: AbortSignal.timeout(6000) });
+    const r = await fetchWithTimeout(host + '/api/tags', { method: 'GET', headers: { 'Accept': 'application/json' } }, 8000);
     const ms = Date.now() - t0;
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
     const data = await r.json();
     const count = (data.models || []).length;
     btn.textContent = '✓ OK';
     btn.className = 'test-btn ok';
     result.className = 'conn-result ok';
-    result.textContent = `✓ Connected in ${ms}ms · ${count} model${count !== 1 ? 's' : ''} installed`;
-
-    // Auto-populate models on successful test
+    result.textContent = '✓ Connected in ' + ms + 'ms · ' + count + ' model' + (count !== 1 ? 's' : '') + ' installed';
     if (count > 0) populateModels(data.models, host);
   } catch(e) {
     btn.textContent = '✗ Fail';
     btn.className = 'test-btn fail';
     result.className = 'conn-result fail';
-    let reason = e.message;
-    if (e.name === 'TimeoutError' || e.name === 'AbortError') reason = 'Timed out after 6s';
-    else if (reason.includes('fetch')) reason = 'Cannot reach host — check URL & that Ollama is running';
-    result.textContent = `✗ ${reason}`;
-    setTimeout(() => { btn.textContent = 'Test'; btn.className = 'test-btn'; }, 3000);
+    const raw = (e.name || 'Error') + ': ' + (e.message || String(e));
+    let hint = '';
+    if (e.name === 'AbortError') {
+      hint = 'Timed out after 8s — host may be unreachable.';
+    } else if (raw.toLowerCase().includes('failed to fetch') || raw.toLowerCase().includes('networkerror')) {
+      hint = 'CORS is likely blocking the request. On your server run:\n  sudo systemctl edit ollama\nand make sure OLLAMA_ORIGINS=* is set, then restart Ollama.';
+    }
+    result.innerHTML = '<span style="opacity:0.7">Raw error:</span> ' + raw.replace(/</g,'&lt;') + (hint ? '<br><br><span style="opacity:0.7">Hint:</span> ' + hint.replace(/\n/g,'<br>') : '');
+    setTimeout(function(){ btn.textContent = 'Test'; btn.className = 'test-btn'; }, 6000);
   }
 }
 
@@ -863,7 +878,7 @@ async function fetchModels() {
   btn.textContent = '⟳ Loading...';
   info.textContent = '';
   try {
-    const r = await fetch(`${host}/api/tags`, { signal: AbortSignal.timeout(6000) });
+    const r = await fetchWithTimeout(`${host}/api/tags`, {}, 6000);
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const data = await r.json();
     if (!(data.models || []).length) {
@@ -911,7 +926,7 @@ async function checkConnection() {
   dot.className = 'status-dot';
   txt.textContent = 'connecting...';
   try {
-    const r = await fetch(`${config.host}/api/tags`, { signal: AbortSignal.timeout(4000) });
+    const r = await fetchWithTimeout(`${config.host}/api/tags`, {}, 4000);
     if (r.ok) {
       dot.className = 'status-dot connected';
       txt.textContent = 'connected';
@@ -964,6 +979,10 @@ async function sendMessage() {
   document.getElementById('stop-btn').classList.add('visible');
   isStreaming = true;
 
+  let thinkRemoved = false;
+  let aiBubbleEl = null;
+  let fullText = '';
+
   try {
     abortCtrl = new AbortController();
 
@@ -971,12 +990,12 @@ async function sendMessage() {
     if (config.systemPrompt) messages.push({ role: 'system', content: config.systemPrompt });
     messages.push(...history);
 
-    const r = await fetch(`${config.host}/api/chat`, {
+    const r = await fetch(config.host + '/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: config.model,
-        messages,
+        messages: messages,
         stream: true,
         options: {
           temperature: config.temperature,
@@ -991,44 +1010,55 @@ async function sendMessage() {
       throw new Error(err || 'HTTP ' + r.status);
     }
 
+    // Remove thinking bubble and create AI message
+    thinkEl.remove();
+    thinkRemoved = true;
+    const msgEl = appendMessage('ai', '');
+    aiBubbleEl = msgEl.querySelector('.bubble');
+    aiBubbleEl.innerHTML = '<span class="cursor-blink"></span>';
+
     // Stream response
     const reader = r.body.getReader();
     const decoder = new TextDecoder();
-    let fullText = '';
-    let msgEl = null;
-
-    thinkEl.remove();
-    msgEl = appendMessage('ai', '');
-    const bubbleEl = msgEl.querySelector('.bubble');
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
       const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split('\n').filter(Boolean);
-      for (const line of lines) {
+      const lines = chunk.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
         try {
           const obj = JSON.parse(line);
-          if (obj.message?.content) {
+          if (obj.message && obj.message.content) {
             fullText += obj.message.content;
-            bubbleEl.innerHTML = renderMarkdown(fullText) + '<span class="cursor-blink"></span>';
+            aiBubbleEl.innerHTML = renderMarkdown(fullText) + '<span class="cursor-blink"></span>';
             scrollToBottom();
           }
-          if (obj.done) {
-            bubbleEl.innerHTML = renderMarkdown(fullText);
-          }
-        } catch {}
+        } catch(parseErr) {}
       }
     }
 
+    // Final render without cursor
+    if (aiBubbleEl) aiBubbleEl.innerHTML = renderMarkdown(fullText);
     history.push({ role: 'assistant', content: fullText });
 
   } catch(e) {
-    thinkEl?.remove?.();
+    if (!thinkRemoved) { try { thinkEl.remove(); } catch(x){} }
     if (e.name !== 'AbortError') {
-      appendMessage('ai', `⚠ Error: ${e.message}`);
-      toast(e.message, true);
+      const errMsg = e.message || String(e);
+      if (aiBubbleEl) {
+        aiBubbleEl.innerHTML = '⚠ ' + escapeHtml(errMsg);
+      } else {
+        appendMessage('ai', '⚠ ' + errMsg);
+      }
+      toast(errMsg, true);
       checkConnection();
+    } else {
+      // Stopped by user — keep whatever text we got
+      if (aiBubbleEl) aiBubbleEl.innerHTML = renderMarkdown(fullText);
+      if (fullText) history.push({ role: 'assistant', content: fullText });
     }
   } finally {
     isStreaming = false;
