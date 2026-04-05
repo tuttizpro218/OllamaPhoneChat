@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android' version '1.9.0'
 }
 android {
     namespace 'com.example.ollama'
@@ -19,4 +20,9 @@ android {
 }
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
+    configurations.all {
+        resolutionStrategy {
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
+        }
+    }
 }
