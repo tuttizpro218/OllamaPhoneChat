@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ollama Chat</title>
 
 <style>
@@ -53,8 +53,6 @@
     background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
   }
 
   /* HEADER */
@@ -655,10 +653,161 @@
 
   /* Scrollbar for messages */
   #messages { scrollbar-width: none; }
+
+  /* ── HISTORY PANEL ─────────────────────────────────────────────────────── */
+  #history-panel {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--bg);
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+  }
+  #history-panel.open { transform: translateX(0); }
+
+  .history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .history-header h2 { font-size: 18px; font-weight: 700; }
+  .history-header-right { display: flex; gap: 8px; align-items: center; }
+
+  .new-chat-btn {
+    padding: 8px 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-appearance: none;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  .new-chat-btn:active { opacity: 0.8; }
+
+  #history-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  #history-list::-webkit-scrollbar { display: none; }
+
+  .history-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--muted);
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .history-empty-icon { font-size: 36px; opacity: 0.4; }
+  .history-empty p { font-size: 14px; opacity: 0.5; }
+
+  .chat-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    animation: msgIn 0.2s ease;
+  }
+  .chat-item:active { background: var(--surface2); transform: scale(0.98); }
+  .chat-item.active-chat { border-color: var(--accent); background: rgba(124,106,247,0.06); }
+
+  .chat-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+  .chat-item-preview {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 6px;
+  }
+  .chat-item-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .chat-item-date {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    opacity: 0.7;
+  }
+  .chat-item-count {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: rgba(124,106,247,0.1);
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .chat-item-delete {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: rgba(248,113,113,0.12);
+    border: 1px solid rgba(248,113,113,0.2);
+    color: var(--error);
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    -webkit-appearance: none;
+  }
+  .chat-item:hover .chat-item-delete { opacity: 1; }
+  .chat-item-delete:active { background: rgba(248,113,113,0.25); }
+  /* Always show delete on touch devices */
+  @media (hover: none) {
+    .chat-item-delete { opacity: 0.6; }
+  }
+
 </style>
 </head>
 <body>
 <div id="app">
+
+  <!-- HISTORY PANEL -->
+  <div id="history-panel">
+    <div class="history-header">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="icon-btn" onclick="closeHistory()">←</button>
+        <h2>Chats</h2>
+      </div>
+      <div class="history-header-right">
+        <button class="new-chat-btn" onclick="newChat()">+ New chat</button>
+      </div>
+    </div>
+    <div id="history-list"></div>
+  </div>
 
   <!-- SETTINGS PANEL -->
   <div id="settings-panel">
@@ -715,7 +864,7 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" onclick="clearChat()" title="Clear">🗑</button>
+      <button class="icon-btn" onclick="openHistory()" title="History">💬</button>
       <button class="icon-btn" onclick="openSettings()" title="Settings">⚙</button>
     </div>
   </header>
@@ -761,7 +910,8 @@ let config = {
   contextLength: 2048,
 };
 
-let history = [];    // [{role, content}]
+let history = [];    // [{role, content}] current conversation
+let currentChatId = null;  // id of chat being shown
 let abortCtrl = null;
 let isStreaming = false;
 
@@ -778,6 +928,12 @@ function fetchWithTimeout(url, opts, ms) {
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
+function getAllChats() {
+  try {
+    return JSON.parse(localStorage.getItem('ollama-chats') || '[]');
+  } catch(e) { return []; }
+}
+
 (function init() {
   const saved = localStorage.getItem('ollama-config');
   if (saved) {
@@ -785,6 +941,24 @@ function fetchWithTimeout(url, opts, ms) {
   }
   applyConfig();
   checkConnection();
+
+  // Restore most recent chat after DOM functions are ready
+  setTimeout(function() {
+    const chats = getAllChats();
+    if (chats.length > 0) {
+      const last = chats[0];
+      history = [...last.history];
+      currentChatId = last.id;
+      const m = document.getElementById('messages');
+      m.innerHTML = '';
+      history.forEach(function(msg) {
+        if (msg.role === 'user' || msg.role === 'assistant') {
+          appendMessage(msg.role === 'assistant' ? 'ai' : 'user', msg.content);
+        }
+      });
+      scrollToBottom();
+    }
+  }, 0);
 })();
 
 function applyConfig() {
@@ -1053,6 +1227,7 @@ async function sendMessage() {
     // Final render without cursor
     if (aiBubbleEl) aiBubbleEl.innerHTML = renderMarkdown(fullText);
     history.push({ role: 'assistant', content: fullText });
+    saveCurrentChat();
 
   } catch(e) {
     if (!thinkRemoved) { try { thinkEl.remove(); } catch(x){} }
@@ -1142,8 +1317,7 @@ function scrollToBottom() {
   m.scrollTop = m.scrollHeight;
 }
 
-function clearChat() {
-  history = [];
+function showEmptyState() {
   const m = document.getElementById('messages');
   m.innerHTML = '';
   const empty = document.createElement('div');
@@ -1160,6 +1334,113 @@ function clearChat() {
       <div class="suggestion-chip" onclick="useSuggestion(this)">Summarize text</div>
     </div>`;
   m.appendChild(empty);
+}
+
+function clearChat() {
+  if (history.length > 0) saveCurrentChat();
+  history = [];
+  currentChatId = null;
+  showEmptyState();
+}
+
+function newChat() {
+  if (history.length > 0) saveCurrentChat();
+  history = [];
+  currentChatId = null;
+  showEmptyState();
+  closeHistory();
+}
+
+// ── History storage ────────────────────────────────────────────────────────
+function saveCurrentChat() {
+  if (!history.length) return;
+  const chats = getAllChats();
+  const firstUser = history.find(m => m.role === 'user');
+  const title = firstUser ? firstUser.content.slice(0, 60) : 'Chat';
+  const preview = history.length > 1 ? history[history.length-1].content.slice(0, 80) : '';
+
+  if (currentChatId) {
+    const idx = chats.findIndex(c => c.id === currentChatId);
+    if (idx !== -1) {
+      chats[idx] = { ...chats[idx], title, preview, history: [...history], updatedAt: Date.now() };
+    } else {
+      chats.unshift({ id: currentChatId, title, preview, history: [...history], createdAt: Date.now(), updatedAt: Date.now() });
+    }
+  } else {
+    currentChatId = 'chat_' + Date.now();
+    chats.unshift({ id: currentChatId, title, preview, history: [...history], createdAt: Date.now(), updatedAt: Date.now() });
+  }
+  localStorage.setItem('ollama-chats', JSON.stringify(chats));
+}
+
+function deleteChat(id, e) {
+  e.stopPropagation();
+  const chats = getAllChats().filter(c => c.id !== id);
+  localStorage.setItem('ollama-chats', JSON.stringify(chats));
+  if (currentChatId === id) {
+    history = [];
+    currentChatId = null;
+    showEmptyState();
+  }
+  renderHistoryList();
+}
+
+function loadChat(chat) {
+  if (history.length > 0 && currentChatId !== chat.id) saveCurrentChat();
+  history = [...chat.history];
+  currentChatId = chat.id;
+
+  // Render messages
+  const m = document.getElementById('messages');
+  m.innerHTML = '';
+  history.forEach(msg => {
+    if (msg.role === 'user' || msg.role === 'assistant') {
+      appendMessage(msg.role === 'assistant' ? 'ai' : 'user', msg.content);
+    }
+  });
+  closeHistory();
+  scrollToBottom();
+}
+
+function renderHistoryList() {
+  const list = document.getElementById('history-list');
+  const chats = getAllChats();
+  list.innerHTML = '';
+
+  if (!chats.length) {
+    list.innerHTML = '<div class="history-empty"><div class="history-empty-icon">💬</div><p>No saved chats yet.<br>Start a conversation to save it here.</p></div>';
+    return;
+  }
+
+  chats.forEach(chat => {
+    const item = document.createElement('div');
+    item.className = 'chat-item' + (chat.id === currentChatId ? ' active-chat' : '');
+
+    const msgCount = chat.history ? chat.history.length : 0;
+    const date = new Date(chat.updatedAt || chat.createdAt);
+    const dateStr = date.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    item.innerHTML = `
+      <div class="chat-item-title">${escapeHtml(chat.title || 'Chat')}</div>
+      <div class="chat-item-preview">${escapeHtml(chat.preview || '...')}</div>
+      <div class="chat-item-meta">
+        <span class="chat-item-date">${dateStr}</span>
+        <span class="chat-item-count">${msgCount} msg${msgCount !== 1 ? 's' : ''}</span>
+      </div>
+      <button class="chat-item-delete" onclick="deleteChat('${chat.id}', event)">✕</button>`;
+
+    item.addEventListener('click', () => loadChat(chat));
+    list.appendChild(item);
+  });
+}
+
+// ── History panel ──────────────────────────────────────────────────────────
+function openHistory() {
+  renderHistoryList();
+  document.getElementById('history-panel').classList.add('open');
+}
+function closeHistory() {
+  document.getElementById('history-panel').classList.remove('open');
 }
 
 // ── Markdown renderer (minimal) ────────────────────────────────────────────
